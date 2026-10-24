@@ -164,6 +164,7 @@ export default {
           const filterLimit = parseInt(url.searchParams.get("limit")) || 10;
           const filterFormat = url.searchParams.get("format") || "raw";
           const fillerDomain = url.searchParams.get("domain") || APP_DOMAIN;
+          const wsHost = url.searchParams.get("host") || APP_DOMAIN;
 
           const prxBankUrl = url.searchParams.get("prx-list") || env.PRX_BANK_URL;
           const prxList = await getPrxList(prxBankUrl)
@@ -186,7 +187,7 @@ export default {
             const uri = new URL(`${atob(horse)}://${fillerDomain}`);
             uri.searchParams.set("encryption", "none");
             uri.searchParams.set("type", "ws");
-            uri.searchParams.set("host", APP_DOMAIN);
+            uri.searchParams.set("host", wsHost);
 
             for (const port of filterPort) {
               for (const protocol of filterVPN) {
@@ -207,7 +208,7 @@ export default {
                 }
 
                 uri.searchParams.set("security", port == 443 ? "tls" : "none");
-                uri.searchParams.set("sni", port == 80 && protocol == atob(flash) ? "" : APP_DOMAIN);
+                uri.searchParams.set("sni", port == 80 && protocol == atob(flash) ? "" : wsHost);
                 uri.searchParams.set("path", `/${prx.prxIP}-${prx.prxPort}`);
 
                 uri.hash = `${result.length + 1} ${getFlagEmoji(prx.country)} ${prx.org} WS ${
